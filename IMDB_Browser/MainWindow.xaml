@@ -6,7 +6,32 @@
         xmlns:local="clr-namespace:IMDB_Browser"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <DockPanel VerticalAlignment="Stretch" Height="auto">
+        <!-- Navigation -->
+        <ToolBarTray DockPanel.Dock="Left">
+            <ToolBar>
+                <StackPanel>
+                    <!-- Navigation buttons with commands bound to ViewModel -->
+                    <Button Command="{Binding NavigateToHomeCommand}" ToolTip="Go home">
+                        <!--<Image Source="{StaticResource HomeIcon}"></Image>-->
+                        <TextBlock>Home</TextBlock>
+                    </Button>
+                    <Button Command="{Binding NavigateToFavouritesCommand}" ToolTip="View all albums">
+                        <TextBlock>Favourites</TextBlock>
+                    </Button>
+                    <Button Command="{Binding NavigateToMediaDetailsCommand}" ToolTip="View all artists">
+                        <TextBlock>Detail (TEMP)</TextBlock>
+                    </Button>
+                    <Button Command="{Binding NavigateToWatchListCommand}" ToolTip="View all tracks">
+                        <TextBlock>Watch List</TextBlock>
+                    </Button>
+                </StackPanel>
+            </ToolBar>
+        </ToolBarTray>
 
-    </Grid>
+        <!-- Frame displays the current ViewModel -->
+        <Border DockPanel.Dock="Right">
+            <Frame Content="{Binding CurrentViewModel}" Height="auto" NavigationUIVisibility="Hidden"/>
+        </Border>
+    </DockPanel>
 </Window>

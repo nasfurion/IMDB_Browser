@@ -1,5 +1,8 @@
-﻿using IMDB_Browser.ViewModels;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,18 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IMDB_Browser
+namespace IMDB_Browser.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for WatchListView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WatchListView : Page
     {
-        public MainWindow(MainViewModel mainViewModel)
+        public WatchListView()
         {
             InitializeComponent();
-            DataContext = mainViewModel;
         }
-
     }
 }
