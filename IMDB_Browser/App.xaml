@@ -4,11 +4,13 @@
              xmlns:local="clr-namespace:IMDB_Browser"
              xmlns:vm="clr-namespace:IMDB_Browser.ViewModels"
              xmlns:views="clr-namespace:IMDB_Browser.Views"
+             xmlns:converters="clr-namespace:IMDB_Browser.Converters"
              Startup="Application_Startup">
     <Application.Resources>
 
         <BitmapImage x:Key="HomeIcon" UriSource="/Assets/home.png"/>
 
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 
         <DataTemplate DataType="{x:Type vm:HomeViewModel}">
             <views:HomeView/>

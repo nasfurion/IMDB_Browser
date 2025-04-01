@@ -1,21 +1,17 @@
-﻿using IMDB_Browser.Navigation;
-using PagingAndData.Commands;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using IMDB_Browser.Navigation;
+using PagingAndData.Commands;
 
 namespace IMDB_Browser.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-
-        // navigation commands
         private readonly INavigationService _navigationService;
         private object _currentViewModel;
+        private string _searchQuery;
+        private bool _isSearchVisible;
 
         public object CurrentViewModel
         {
@@ -24,8 +20,41 @@ namespace IMDB_Browser.ViewModels
             {
                 _currentViewModel = value;
                 OnPropertyChanged(nameof(CurrentViewModel));
+
+                // If the new ViewModel supports searching, update its SearchQuery
+                if (_currentViewModel is ISearchable searchableViewModel)
+                {
+                    searchableViewModel.SearchQuery = this.SearchQuery;
+                }
             }
         }
+
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set
+            {
+                _searchQuery = value;
+                OnPropertyChanged(nameof(SearchQuery));
+
+                // Update search query for the current ViewModel if it supports searching
+                if (CurrentViewModel is ISearchable searchableViewModel)
+                {
+                    searchableViewModel.SearchQuery = value;
+                }
+            }
+        }
+
+        public bool IsSearchVisible
+        {
+            get => _isSearchVisible;
+            set
+            {
+                _isSearchVisible = value;
+                OnPropertyChanged(nameof(IsSearchVisible));
+            }
+        }
+
 
         public MainViewModel(INavigationService navigationService)
         {
@@ -33,13 +62,12 @@ namespace IMDB_Browser.ViewModels
             CurrentViewModel = new HomeViewModel();
         }
 
-        // Commands for navigation
+        // Navigation Commands
         public ICommand NavigateToHomeCommand => new RelayCommand(_ => _navigationService.NavigateTo<HomeViewModel>());
         public ICommand NavigateToFavouritesCommand => new RelayCommand(_ => _navigationService.NavigateTo<FavouritesViewModel>());
         public ICommand NavigateToMediaDetailsCommand => new RelayCommand(_ => _navigationService.NavigateTo<MediaDetailViewModel>());
         public ICommand NavigateToWatchListCommand => new RelayCommand(_ => _navigationService.NavigateTo<WatchListViewModel>());
-        public ICommand GoBackCommand { get; }
-
+        public ICommand ToggleSearchCommand => new RelayCommand(_ => IsSearchVisible = !IsSearchVisible);
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -47,6 +75,5 @@ namespace IMDB_Browser.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }
