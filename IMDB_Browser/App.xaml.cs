@@ -6,6 +6,9 @@ using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.Windows.Controls.Primitives;
+using IMDB_Browser.Data;
+using Microsoft.EntityFrameworkCore;
+using IMDB_Browser.Models;
 
 namespace IMDB_Browser
 {
@@ -39,8 +42,9 @@ namespace IMDB_Browser
         private void ConfigureServices(ServiceCollection services)
         {
             // TODO Configure the database context
-            //services.AddDbContext<ChinookContext>(options =>
-            //    options.UseSqlServer(ConfigurationManager.ConnectionStrings["Chinook"].ConnectionString));
+            services.AddDbContext<ImdbContext>(options =>
+                 options.UseSqlServer(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString));
+
 
             // Register services and view models
             services.AddSingleton<MainWindow>();
@@ -53,21 +57,25 @@ namespace IMDB_Browser
         }
 
 
-        private void LoadData()
+        private async void LoadData()
         {
             using (var scope = ServiceProvider.CreateScope())
             {
                 // Get the database context and view models
+                var dbcontext = scope.ServiceProvider.GetRequiredService<ImdbContext>();
+
+                var titles = await dbcontext.Titles.ToListAsync();
 
                 //TODO import context after running EF
-                //var dbcontext = scope.ServiceProvider.GetRequiredService<ChinookContext>();
                 var homeViewModel = scope.ServiceProvider.GetRequiredService<HomeViewModel>();
                 var mediaDetailsViewModel = scope.ServiceProvider.GetRequiredService<MediaDetailViewModel>();
                 var favouritesViewModel = scope.ServiceProvider.GetRequiredService<FavouritesViewModel>();
                 var watchListViewModel = scope.ServiceProvider.GetRequiredService<WatchListViewModel>();
-                
+
 
                 // Load data from the database and set it in the view models
+                homeViewModel.Titles = new ObservableCollection<Title>(titles);
+
                 // LINQ QUERIES GO HERE:
 
 

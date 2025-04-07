@@ -8,7 +8,19 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomeView">
 
-    <Grid>
-        <TextBlock>I am the home</TextBlock>
-    </Grid>
+    <StackPanel>
+        <!-- Title Type List -->
+        <TextBlock Text="Unique Title Types" FontWeight="Bold" Margin="10" />
+        <ListBox ItemsSource="{Binding UniqueTitleTypes}" Margin="10" Height="400"/>
+
+        <!--<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="10" MaxHeight="350">
+            <ItemsControl ItemsSource="{Binding ImageUrls}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding}" Width="200" Height="300" Margin="5"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>-->
+    </StackPanel>
 </Page>
