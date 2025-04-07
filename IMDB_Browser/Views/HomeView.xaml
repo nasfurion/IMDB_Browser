@@ -4,23 +4,39 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:IMDB_Browser.Views"
+      xmlns:uc="clr-namespace:IMDB_Browser.UserControls"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="1800" d:DesignWidth="2000"
       Title="HomeView">
 
-    <StackPanel>
-        <!-- Title Type List -->
-        <TextBlock Text="Unique Title Types" FontWeight="Bold" Margin="10" />
-        <ListBox ItemsSource="{Binding UniqueTitleTypes}" Margin="10" Height="400"/>
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="Movies" FontWeight="Bold" Margin="10"/>
 
-        <!--<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="10" MaxHeight="350">
-            <ItemsControl ItemsSource="{Binding ImageUrls}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Image Source="{Binding}" Width="200" Height="300" Margin="5"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>-->
-    </StackPanel>
+            <!-- Movies -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10" Height="1000">
+                <ItemsControl ItemsSource="{Binding FilteredTitles}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel HorizontalAlignment="Center" Margin="10" Width="200" VerticalAlignment="Top">
+                                <!-- Display Poster Image -->
+                                <Image Source="{Binding PosterPath, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="300" Stretch="UniformToFill" Margin="0,0,0,5"/>
+
+                                <!-- Display Movie Title Below the Poster -->
+                                <TextBlock Text="{Binding PrimaryTitle}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5"/>
+                                <TextBlock Text="{Binding StartYear}" HorizontalAlignment="Center" Margin="5"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+        </StackPanel>
+    </Grid>
 </Page>

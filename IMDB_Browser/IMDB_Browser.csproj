@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Assets\home.png" />
+    <None Remove="Assets\IMDB-placeholder.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,10 +26,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Assets\home.png" />
+    <Resource Include="Assets\IMDB-placeholder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

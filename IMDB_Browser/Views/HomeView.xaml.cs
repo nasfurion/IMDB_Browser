@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IMDB_Browser.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IMDB_Browser.Views
 {
@@ -23,6 +25,7 @@ namespace IMDB_Browser.Views
         public HomeView()
         {
             InitializeComponent();
+            DataContext = ((App)Application.Current).ServiceProvider.GetService<HomeViewModel>(); // defining the DataContext for the HomeView
         }
     }
 }
