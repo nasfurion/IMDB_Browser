@@ -42,11 +42,17 @@ namespace IMDB_Browser.ViewModels
             get => _searchQuery;
             set
             {
-                _searchQuery = value;
-                OnPropertyChanged(nameof(SearchQuery));
-                _ = FilterTitles();  // Fire and forget, it's async now
+                if (_searchQuery != value)
+                {
+                    _searchQuery = value;
+                    OnPropertyChanged(nameof(SearchQuery));
+
+                    // Filter titles whenever the search query changes
+                    _ = FilterTitles();  // Trigger filtering async
+                }
             }
         }
+
 
         public HomeViewModel()
         {
@@ -71,7 +77,7 @@ namespace IMDB_Browser.ViewModels
             {
                 filtered = _titles
                     .Where(title => title.PrimaryTitle != null &&
-                                    title.PrimaryTitle.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) &&
+                                    title.PrimaryTitle.StartsWith(SearchQuery, StringComparison.OrdinalIgnoreCase) &&
                                     title.TitleType == "movie")
                     .OrderByDescending(title => title.StartYear)
                     .Take(100);
@@ -95,35 +101,71 @@ namespace IMDB_Browser.ViewModels
             foreach (var title in _filteredTitles)
             {
                 string query = Uri.EscapeDataString(title.PrimaryTitle ?? "");
-                string apiUrl = $"https://api.themoviedb.org/3/search/movie?api_key=bf901c064acd8676c98fc66dc8efb60f&query={query}&language=en-US";
+                int currentPage = 1; // Start at page 1
+                bool foundPoster = false;
 
-                try
+                // Loop through all pages until we find a matching poster or exhaust the pages
+                while (!foundPoster)
                 {
-                    var response = await client.GetStringAsync(apiUrl);
-                    var jsonResponse = JsonConvert.DeserializeObject<JObject>(response);
-                    var results = jsonResponse["results"] as JArray;
+                    string apiUrl = $"https://api.themoviedb.org/3/search/movie?api_key=bf901c064acd8676c98fc66dc8efb60f&query={query}&language=en-US&page={currentPage}";
 
-                    if (results != null && results.Count > 0)
+                    try
                     {
-                        var firstResult = results[0];
-                        var posterPath = firstResult["poster_path"]?.ToString();
+                        var response = await client.GetStringAsync(apiUrl);
+                        var jsonResponse = JsonConvert.DeserializeObject<JObject>(response);
+                        var results = jsonResponse["results"] as JArray;
+                        var totalPages = jsonResponse["total_pages"]?.ToObject<int>() ?? 1;
 
-                        title.PosterPath = !string.IsNullOrEmpty(posterPath)
-                            ? $"https://image.tmdb.org/t/p/w500{posterPath}"
-                            : "/Assets/IMDB-placeholder.png";
+                        if (results != null && results.Count > 0)
+                        {
+                            foreach (var result in results)
+                            {
+                                var releaseDate = result["release_date"]?.ToString();
+                                var posterPath = result["poster_path"]?.ToString();
+
+                                if (!string.IsNullOrEmpty(releaseDate) && DateTime.TryParse(releaseDate, out var releaseDateParsed))
+                                {
+                                    if (title.StartYear.HasValue && releaseDateParsed.Year == title.StartYear.Value)
+                                    {
+                                        title.PosterPath = !string.IsNullOrEmpty(posterPath)
+                                            ? $"https://image.tmdb.org/t/p/w500{posterPath}"
+                                            : "/Assets/IMDB-placeholder.png";
+                                        foundPoster = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        // If we have found the poster, exit the loop
+                        if (foundPoster) break;
+
+                        // If we haven't found the poster, check if we are on the last page
+                        if (currentPage >= totalPages)
+                        {
+                            break; // Exit the loop if we've reached the last page
+                        }
+
+                        // Otherwise, move to the next page
+                        currentPage++;
                     }
-                    else
+                    catch (Exception ex)
                     {
+                        Console.WriteLine($"Error fetching poster for {title.PrimaryTitle}: {ex.Message}");
                         title.PosterPath = "/Assets/IMDB-placeholder.png";
+                        break;
                     }
                 }
-                catch (Exception ex)
+
+                // If no poster is found, set a placeholder
+                if (!foundPoster)
                 {
-                    Console.WriteLine($"Error fetching poster for {title.PrimaryTitle}: {ex.Message}");
                     title.PosterPath = "/Assets/IMDB-placeholder.png";
                 }
             }
         }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

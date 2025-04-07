@@ -59,7 +59,11 @@ namespace IMDB_Browser.ViewModels
         public MainViewModel(INavigationService navigationService)
         {
             _navigationService = navigationService;
-            CurrentViewModel = new HomeViewModel();
+            var homeViewModel = new HomeViewModel();
+            CurrentViewModel = homeViewModel;
+
+            // Propagate SearchQuery to HomeViewModel directly
+            homeViewModel.SearchQuery = this.SearchQuery;
         }
 
         // Navigation Commands

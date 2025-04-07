@@ -45,7 +45,6 @@ namespace IMDB_Browser
             services.AddDbContext<ImdbContext>(options =>
                  options.UseSqlServer(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString));
 
-
             // Register services and view models
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainViewModel>();
@@ -71,7 +70,6 @@ namespace IMDB_Browser
                 var mediaDetailsViewModel = scope.ServiceProvider.GetRequiredService<MediaDetailViewModel>();
                 var favouritesViewModel = scope.ServiceProvider.GetRequiredService<FavouritesViewModel>();
                 var watchListViewModel = scope.ServiceProvider.GetRequiredService<WatchListViewModel>();
-
 
                 // Load data from the database and set it in the view models
                 homeViewModel.Titles = new ObservableCollection<Title>(titles);
