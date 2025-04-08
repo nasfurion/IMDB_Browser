@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IMDB_Browser.Models;
 using IMDB_Browser.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,5 +28,16 @@ namespace IMDB_Browser.Views
             InitializeComponent();
             DataContext = ((App)Application.Current).ServiceProvider.GetService<HomeViewModel>(); // defining the DataContext for the HomeView
         }
+        private void ViewDetailsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var mainViewModel = ((App)Application.Current).ServiceProvider.GetService<MainViewModel>();
+            var selectedTitle = (sender as Button)?.DataContext as Title;
+
+            if (selectedTitle != null)
+            {
+                mainViewModel.NavigateToMediaDetailsCommand.Execute(selectedTitle);
+            }
+        }
+
     }
 }

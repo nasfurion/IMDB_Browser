@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using IMDB_Browser.Models;
+using IMDB_Browser.Navigation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -12,6 +13,7 @@ namespace IMDB_Browser.ViewModels
 {
     public class HomeViewModel : INotifyPropertyChanged, ISearchable
     {
+        private readonly INavigationService _navigationService;
         private ObservableCollection<Title> _titles;
         private ObservableCollection<Title> _filteredTitles;
         private string _searchQuery;
@@ -53,16 +55,39 @@ namespace IMDB_Browser.ViewModels
             }
         }
 
-
+        // Default constructor
         public HomeViewModel()
         {
             _filteredTitles = new ObservableCollection<Title>();
+            _titles = new ObservableCollection<Title>();
+
+            // Populate Titles with sample data for testing
+            LoadSampleData();
         }
 
-        // Now async
+        // Constructor with INavigationService
+        public HomeViewModel(INavigationService navigationService) : this()
+        {
+            _navigationService = navigationService;
+        }
+
+        private void LoadSampleData()
+        {
+            // Add some sample data to the Titles collection
+            Titles.Add(new Title { PrimaryTitle = "Inception", StartYear = 2010, TitleType = "movie", PosterPath = "/Assets/IMDB-placeholder.png" });
+            Titles.Add(new Title { PrimaryTitle = "The Matrix", StartYear = 1999, TitleType = "movie", PosterPath = "/Assets/IMDB-placeholder.png" });
+            Titles.Add(new Title { PrimaryTitle = "Interstellar", StartYear = 2014, TitleType = "movie", PosterPath = "/Assets/IMDB-placeholder.png" });
+
+            Console.WriteLine("Sample data loaded into Titles collection.");
+        }
+
         private async Task FilterTitles()
         {
-            if (_titles == null) return;
+            if (_titles == null || !_titles.Any())
+            {
+                Console.WriteLine("Titles collection is empty. No filtering will be performed.");
+                return;
+            }
 
             IEnumerable<Title> filtered;
 
@@ -87,6 +112,8 @@ namespace IMDB_Browser.ViewModels
             _filteredTitles.Clear();
             foreach (var item in filtered)
                 _filteredTitles.Add(item);
+
+            Console.WriteLine($"FilteredTitles updated with {FilteredTitles.Count} items.");
 
             // Fetch poster paths for each filtered title
             await FetchPostersForTitles();
@@ -164,8 +191,6 @@ namespace IMDB_Browser.ViewModels
                 }
             }
         }
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

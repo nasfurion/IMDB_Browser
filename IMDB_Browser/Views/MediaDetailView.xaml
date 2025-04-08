@@ -3,12 +3,16 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:IMDB_Browser.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MediaDetailView">
 
-    <Grid>
-        <TextBlock>I am details</TextBlock>
+    <Grid Margin="20">
+        <StackPanel>
+            <Image Source="{Binding SelectedTitle.PosterPath}" Width="300" Height="450" Stretch="Uniform" Margin="0,0,0,20"/>
+            <TextBlock Text="{Binding SelectedTitle.PrimaryTitle}" FontSize="24" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="{Binding SelectedTitle.StartYear}" FontSize="18" Margin="0,0,0,10"/>
+            <TextBlock Text="{Binding SelectedTitle.OriginalTitle}" FontSize="16" FontStyle="Italic" Margin="0,0,0,10"/>
+        </StackPanel>
     </Grid>
 </Page>

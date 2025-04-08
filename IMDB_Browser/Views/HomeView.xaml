@@ -4,7 +4,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:IMDB_Browser.Views"
-      xmlns:uc="clr-namespace:IMDB_Browser.UserControls"
       mc:Ignorable="d" 
       d:DesignHeight="1800" d:DesignWidth="2000"
       Title="HomeView">
@@ -25,18 +24,19 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel HorizontalAlignment="Center" Margin="10" Width="200" VerticalAlignment="Top">
-                                <!-- Display Poster Image -->
                                 <Image Source="{Binding PosterPath, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="300" Stretch="UniformToFill" Margin="0,0,0,5"/>
-
-                                <!-- Display Movie Title Below the Poster -->
                                 <TextBlock Text="{Binding PrimaryTitle}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5"/>
                                 <TextBlock Text="{Binding StartYear}" HorizontalAlignment="Center" Margin="5"/>
+                                <Button Content="View Details"
+                                        Click="ViewDetailsButton_Click" />
+
+
+
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-
         </StackPanel>
     </Grid>
 </Page>
