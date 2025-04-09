@@ -7,18 +7,31 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MediaDetailView">
 
-    <Grid Margin="20">
-        <StackPanel>
-            <Image Source="{Binding SelectedTitle.PosterPath}" Width="300" Height="450" Stretch="Uniform" Margin="0,0,0,20"/>
-            <TextBlock Text="{Binding SelectedTitle.PrimaryTitle}" FontSize="24" FontWeight="Bold" Margin="0,0,0,10"/>
-            <TextBlock Text="{Binding SelectedTitle.OriginalTitle}" FontSize="16" FontStyle="Italic" Margin="0,0,0,10"/>
-            <TextBlock Text="{Binding SelectedTitle.StartYear}" FontSize="18" Margin="0,0,0,10"/>
-            <StackPanel>
-                <TextBlock Text="Rating: "></TextBlock>
-                <TextBlock Text="{Binding SelectedTitle.Rating.AverageRating}"></TextBlock>
+    <Grid Background="#F5F5F5" Margin="20">
+        <StackPanel Style="{StaticResource DetailStackPanelStyle}" HorizontalAlignment="Center">
+            <Image Source="{Binding SelectedTitle.PosterPath}" Style="{StaticResource PosterImageStyle}"/>
+            <StackPanel Style="{StaticResource DetailContainerStyle}">
+                <TextBlock Text="{Binding SelectedTitle.PrimaryTitle}" Style="{StaticResource TitleTextBlockStyle}"/>
+                <TextBlock Text="{Binding SelectedTitle.OriginalTitle}" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Genres: " Style="{StaticResource TextBlockStyle}"></TextBlock>
+                    <TextBlock Text="{Binding SelectedTitle.Genres}" Style="{StaticResource YearTextBlockStyle}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Release Year: " Style="{StaticResource TextBlockStyle}"></TextBlock>
+                    <TextBlock Text="{Binding SelectedTitle.StartYear}" Style="{StaticResource YearTextBlockStyle}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Rating: " Style="{StaticResource TextBlockStyle}"/>
+                    <TextBlock Text="{Binding SelectedTitle.Rating.AverageRating, FallbackValue='N/A'}" Style="{StaticResource RatingValueTextBlockStyle}"/>
+                </StackPanel>
+                
+                <TextBlock Text="Description:" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <TextBlock Text="{Binding SelectedTitle.Description}" Style="{StaticResource DescriptionTextBlockStyle}"/>
             </StackPanel>
-            <TextBlock Text="Description:" FontSize="16" FontStyle="Italic" Margin="0,0,0,10"/>
-            <TextBlock Text="{Binding SelectedTitle.Description}" FontSize="16" FontStyle="Italic" Margin="0,0,0,10"/>
         </StackPanel>
     </Grid>
 </Page>
