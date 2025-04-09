@@ -149,11 +149,13 @@ namespace IMDB_Browser.ViewModels
                             {
                                 var releaseDate = result["release_date"]?.ToString();
                                 var posterPath = result["poster_path"]?.ToString();
+                                var description = result["overview"]?.ToString();
 
                                 if (!string.IsNullOrEmpty(releaseDate) && DateTime.TryParse(releaseDate, out var releaseDateParsed))
                                 {
                                     if (title.StartYear.HasValue && releaseDateParsed.Year == title.StartYear.Value)
                                     {
+                                        title.Description = !string.IsNullOrEmpty(description) ? description : "No description available.";
                                         title.PosterPath = !string.IsNullOrEmpty(posterPath)
                                             ? $"https://image.tmdb.org/t/p/w500{posterPath}"
                                             : "/Assets/IMDB-placeholder.png";

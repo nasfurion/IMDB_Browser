@@ -11,6 +11,7 @@ namespace IMDB_Browser.Models
     public partial class Title : INotifyPropertyChanged
     {
         private string? _posterPath = string.Empty;
+        private string? _description = string.Empty;
 
         [NotMapped]
         public string? PosterPath
@@ -22,6 +23,20 @@ namespace IMDB_Browser.Models
                 {
                     _posterPath = value;
                     OnPropertyChanged(nameof(PosterPath));
+                }
+            }
+        }
+
+        [NotMapped]
+        public string? Description
+        {
+            get => _description;
+            set
+            {
+                if (_description != value)
+                {
+                    _description = value;
+                    OnPropertyChanged(nameof(Description));
                 }
             }
         }

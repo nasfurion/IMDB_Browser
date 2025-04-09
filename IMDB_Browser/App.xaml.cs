@@ -63,7 +63,9 @@ namespace IMDB_Browser
                 // Get the database context and view models
                 var dbcontext = scope.ServiceProvider.GetRequiredService<ImdbContext>();
 
-                var titles = await dbcontext.Titles.ToListAsync();
+                var titles = await dbcontext.Titles
+                    .Include(t => t.Rating)
+                    .ToListAsync();
 
                 //TODO import context after running EF
                 var homeViewModel = scope.ServiceProvider.GetRequiredService<HomeViewModel>();
