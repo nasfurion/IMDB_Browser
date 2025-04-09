@@ -63,11 +63,15 @@ namespace IMDB_Browser
                 // Get the database context and view models
                 var dbcontext = scope.ServiceProvider.GetRequiredService<ImdbContext>();
 
+                // LINQ QUERIES GO HERE:
                 var titles = await dbcontext.Titles
                     .Include(t => t.Rating)
                     .ToListAsync();
 
-                //TODO import context after running EF
+                // Filter favorite titles
+                var favoriteTitles = titles.Where(t => t.IsFavorite).ToList();
+
+                // Get the view models from the service provider
                 var homeViewModel = scope.ServiceProvider.GetRequiredService<HomeViewModel>();
                 var mediaDetailsViewModel = scope.ServiceProvider.GetRequiredService<MediaDetailViewModel>();
                 var favouritesViewModel = scope.ServiceProvider.GetRequiredService<FavouritesViewModel>();
@@ -75,9 +79,7 @@ namespace IMDB_Browser
 
                 // Load data from the database and set it in the view models
                 homeViewModel.Titles = new ObservableCollection<Title>(titles);
-
-                // LINQ QUERIES GO HERE:
-
+                favouritesViewModel.FavMovies = new ObservableCollection<Title>(favoriteTitles);
 
             }
         }

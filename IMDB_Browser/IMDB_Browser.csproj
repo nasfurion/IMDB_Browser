@@ -9,8 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\favourite-add.png" />
+    <None Remove="Assets\favourite-remove.png" />
     <None Remove="Assets\home.png" />
     <None Remove="Assets\IMDB-placeholder.png" />
+    <None Remove="Assets\watchlist-add.png" />
+    <None Remove="Assets\watchlist-remove.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,8 +34,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\favourite-add.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\favourite-remove.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\home.png" />
     <Resource Include="Assets\IMDB-placeholder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\watchlist-add.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\watchlist-remove.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

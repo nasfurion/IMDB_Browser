@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IMDB_Browser.Models;
+using IMDB_Browser.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IMDB_Browser.Views
 {
@@ -23,6 +26,34 @@ namespace IMDB_Browser.Views
         public WatchListView()
         {
             InitializeComponent();
+            DataContext = ((App)Application.Current).ServiceProvider.GetService<WatchListViewModel>(); // defining the DataContext for the WatchlistView
+        }
+
+        private void PosterImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Image image && image.DataContext is Title title)
+            {
+                // Handle poster image click
+                MessageBox.Show($"Poster clicked: {title.PrimaryTitle}");
+            }
+        }
+
+        private void ToggleWatchlist_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Image image && image.DataContext is Title title)
+            {
+                // Handle toggle watchlist click
+                title.IsInWatchlist = !title.IsInWatchlist;
+            }
+        }
+
+        private void ToggleFavorite_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Image image && image.DataContext is Title title)
+            {
+                // Handle toggle favorite click
+                title.IsFavorite = !title.IsFavorite;
+            }
         }
     }
 }

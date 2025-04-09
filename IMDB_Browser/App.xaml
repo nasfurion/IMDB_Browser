@@ -11,6 +11,9 @@
         <BitmapImage x:Key="HomeIcon" UriSource="/Assets/home.png"/>
 
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
+        <converters:WatchlistImageConverter x:Key="WatchlistImageConverter"/>
+        <converters:FavoriteImageConverter x:Key="FavoriteImageConverter"/>
 
         <DataTemplate DataType="{x:Type vm:HomeViewModel}">
             <views:HomeView/>

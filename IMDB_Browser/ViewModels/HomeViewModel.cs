@@ -4,16 +4,21 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using IMDB_Browser.Models;
 using IMDB_Browser.Navigation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PagingAndData.Commands;
 
 namespace IMDB_Browser.ViewModels
 {
     public class HomeViewModel : INotifyPropertyChanged, ISearchable
     {
         private readonly INavigationService _navigationService;
+        private readonly FavouritesViewModel _favouritesViewModel;
+        private readonly WatchListViewModel _watchListViewModel;
+        private readonly MainViewModel _mainViewModel;
         private ObservableCollection<Title> _titles;
         private ObservableCollection<Title> _filteredTitles;
         private string _searchQuery;
@@ -55,30 +60,26 @@ namespace IMDB_Browser.ViewModels
             }
         }
 
+        public ICommand ToggleFavoriteCommand { get; }
+        public ICommand ToggleWatchlistCommand { get; }
+
         // Default constructor
         public HomeViewModel()
         {
             _filteredTitles = new ObservableCollection<Title>();
             _titles = new ObservableCollection<Title>();
 
-            // Populate Titles with sample data for testing
-            LoadSampleData();
+            ToggleFavoriteCommand = new RelayCommand(param => ToggleFavorite((Title)param));
+            ToggleWatchlistCommand = new RelayCommand(param => ToggleWatchlist((Title)param));
         }
 
-        // Constructor with INavigationService
-        public HomeViewModel(INavigationService navigationService) : this()
+        // Constructor with INavigationService, FavouritesViewModel, and WatchListViewModel
+        public HomeViewModel(INavigationService navigationService, FavouritesViewModel favouritesViewModel, WatchListViewModel watchListViewModel, MainViewModel mainViewModel) : this()
         {
             _navigationService = navigationService;
-        }
-
-        private void LoadSampleData()
-        {
-            // Add some sample data to the Titles collection
-            Titles.Add(new Title { PrimaryTitle = "Inception", StartYear = 2010, TitleType = "movie", PosterPath = "/Assets/IMDB-placeholder.png" });
-            Titles.Add(new Title { PrimaryTitle = "The Matrix", StartYear = 1999, TitleType = "movie", PosterPath = "/Assets/IMDB-placeholder.png" });
-            Titles.Add(new Title { PrimaryTitle = "Interstellar", StartYear = 2014, TitleType = "movie", PosterPath = "/Assets/IMDB-placeholder.png" });
-
-            Console.WriteLine("Sample data loaded into Titles collection.");
+            _favouritesViewModel = favouritesViewModel;
+            _watchListViewModel = watchListViewModel;
+            _mainViewModel = mainViewModel;
         }
 
         private async Task FilterTitles()
@@ -193,6 +194,27 @@ namespace IMDB_Browser.ViewModels
                 }
             }
         }
+
+        private void ToggleFavorite(Title title)
+        {
+            if (title != null)
+            {
+                title.IsFavorite = !title.IsFavorite;
+                OnPropertyChanged(nameof(Titles));
+                _favouritesViewModel.UpdateFavorites(title);
+            }
+        }
+
+        private void ToggleWatchlist(Title title)
+        {
+            if (title != null)
+            {
+                title.IsInWatchlist = !title.IsInWatchlist;
+                OnPropertyChanged(nameof(Titles));
+                _watchListViewModel.UpdateWatchList(title);
+            }
+        }
+        public ICommand NavigateToMediaDetailsCommand => _mainViewModel.NavigateToMediaDetailsCommand;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -4,9 +4,16 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:IMDB_Browser.Views"
+      xmlns:converters="clr-namespace:IMDB_Browser.Converters"
       mc:Ignorable="d" 
       d:DesignHeight="1800" d:DesignWidth="2000"
       Title="HomeView">
+
+    <Page.Resources>
+        <converters:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
+        <converters:WatchlistImageConverter x:Key="WatchlistImageConverter"/>
+        <converters:FavoriteImageConverter x:Key="FavoriteImageConverter"/>
+    </Page.Resources>
 
     <Grid>
         <StackPanel>
@@ -24,14 +31,23 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel HorizontalAlignment="Center" Margin="10" Width="200" VerticalAlignment="Top">
-                                <Image Source="{Binding PosterPath, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="300" Stretch="UniformToFill" Margin="0,0,0,5"/>
-                                <TextBlock Text="{Binding PrimaryTitle}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5"/>
-                                <TextBlock Text="{Binding StartYear}" HorizontalAlignment="Center" Margin="5"/>
-                                <Button Content="View Details"
-                                        Click="ViewDetailsButton_Click" />
-
-
-
+                                <Grid>
+                                    <Image Source="{Binding PosterPath, Converter={StaticResource StringToImageSourceConverter}}" Width="200" Height="300" Stretch="UniformToFill" Margin="0,0,0,5" MouseLeftButtonUp="PosterImage_MouseLeftButtonUp"/>
+                                    <Image Source="{Binding IsInWatchlist, Converter={StaticResource WatchlistImageConverter}}" Width="40" Height="40" VerticalAlignment="Top" HorizontalAlignment="Left" MouseLeftButtonUp="ToggleWatchlist_MouseLeftButtonUp"/>
+                                </Grid>
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding PrimaryTitle}" FontWeight="Bold" Margin="2" HorizontalAlignment="Left" Grid.Column="0"/>
+                                        <Image Source="{Binding IsFavorite, Converter={StaticResource FavoriteImageConverter}}" Width="20" Height="20" Margin="2" HorizontalAlignment="Right" Grid.Column="1" MouseLeftButtonUp="ToggleFavorite_MouseLeftButtonUp"/>
+                                    </Grid>
+                                    <StackPanel>
+                                        <TextBlock Text="Release Year: {Binding StartYear}" Margin="2"/>
+                                    </StackPanel>
+                                </StackPanel>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

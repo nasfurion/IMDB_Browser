@@ -12,6 +12,8 @@ namespace IMDB_Browser.Models
     {
         private string? _posterPath = string.Empty;
         private string? _description = string.Empty;
+        private bool _isFavorite = false;
+        private bool _isInWatchlist = false;
 
         [NotMapped]
         public string? PosterPath
@@ -37,6 +39,34 @@ namespace IMDB_Browser.Models
                 {
                     _description = value;
                     OnPropertyChanged(nameof(Description));
+                }
+            }
+        }
+
+        [NotMapped]
+        public bool IsFavorite
+        {
+            get => _isFavorite;
+            set
+            {
+                if (_isFavorite != value)
+                {
+                    _isFavorite = value;
+                    OnPropertyChanged(nameof(IsFavorite));
+                }
+            }
+        }
+
+        [NotMapped]
+        public bool IsInWatchlist
+        {
+            get => _isInWatchlist;
+            set
+            {
+                if (_isInWatchlist != value)
+                {
+                    _isInWatchlist = value;
+                    OnPropertyChanged(nameof(IsInWatchlist));
                 }
             }
         }

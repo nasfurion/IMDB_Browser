@@ -56,17 +56,38 @@ namespace IMDB_Browser.ViewModels
             }
         }
 
+        public ICommand ToggleFavoriteCommand { get; }
+        public ICommand ToggleWatchlistCommand { get; }
 
-        public MainViewModel(INavigationService navigationService)
+        public MainViewModel(INavigationService navigationService, FavouritesViewModel favouritesViewModel, WatchListViewModel watchlistViewModel)
         {
             _navigationService = navigationService;
 
-            // Pass the navigation service to HomeViewModel
-            var homeViewModel = new HomeViewModel(_navigationService);
+            // Pass the navigation service and favouritesViewModel to HomeViewModel
+            var homeViewModel = new HomeViewModel(_navigationService, favouritesViewModel, watchlistViewModel, this);
             CurrentViewModel = homeViewModel;
 
             // Propagate SearchQuery to HomeViewModel directly
             homeViewModel.SearchQuery = this.SearchQuery;
+
+            ToggleFavoriteCommand = new RelayCommand(param => ToggleFavorite((Title)param));
+            ToggleWatchlistCommand = new RelayCommand(param => ToggleWatchlist((Title)param));
+        }
+
+        private void ToggleFavorite(Title title)
+        {
+            if (title != null)
+            {
+                title.IsFavorite = !title.IsFavorite;
+            }
+        }
+
+        private void ToggleWatchlist(Title title)
+        {
+            if (title != null)
+            {
+                title.IsInWatchlist = !title.IsInWatchlist;
+            }
         }
 
 
