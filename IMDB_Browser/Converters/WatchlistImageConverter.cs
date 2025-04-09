@@ -7,7 +7,7 @@ namespace IMDB_Browser.Converters
 {
     public class WatchlistImageConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) 
         {
             if (value is bool isInWatchlist)
             {
