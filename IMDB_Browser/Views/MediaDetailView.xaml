@@ -31,6 +31,8 @@
                 
                 <TextBlock Text="Description:" Style="{StaticResource SubtitleTextBlockStyle}"/>
                 <TextBlock Text="{Binding SelectedTitle.Description}" Style="{StaticResource DescriptionTextBlockStyle}"/>
+
+                <ListBox ItemsSource="{Binding Genres}" DisplayMemberPath="Name" Margin="10"/>
             </StackPanel>
         </StackPanel>
     </Grid>
