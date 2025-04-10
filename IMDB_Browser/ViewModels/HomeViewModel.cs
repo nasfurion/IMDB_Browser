@@ -82,7 +82,7 @@ namespace IMDB_Browser.ViewModels
             _mainViewModel = mainViewModel;
         }
 
-        private async Task FilterTitles()
+        public async Task FilterTitles()
         {
             
             
