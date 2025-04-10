@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IMDB_Browser.Models;
+using IMDB_Browser.Navigation;
 using IMDB_Browser.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,8 +34,8 @@ namespace IMDB_Browser.Views
         {
             if (sender is Image image && image.DataContext is Title title)
             {
-                // Handle poster image click
-                MessageBox.Show($"Poster clicked: {title.PrimaryTitle}");
+                var navigationService = ((App)Application.Current).ServiceProvider.GetService<INavigationService>();
+                navigationService?.NavigateTo<MediaDetailViewModel>(title);
             }
         }
 

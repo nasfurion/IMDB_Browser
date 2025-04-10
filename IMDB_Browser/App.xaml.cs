@@ -41,7 +41,6 @@ namespace IMDB_Browser
 
         private void ConfigureServices(ServiceCollection services)
         {
-            // TODO Configure the database context
             services.AddDbContext<ImdbContext>(options =>
                  options.UseSqlServer(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString));
 

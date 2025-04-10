@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:IMDB_Browser.Views"
       xmlns:converters="clr-namespace:IMDB_Browser.Converters"
       mc:Ignorable="d" 
-      d:DesignHeight="1800" d:DesignWidth="2000"
+      d:DesignHeight="800" d:DesignWidth="1000"
       Title="HomeView">
 
     <Page.Resources>
@@ -20,7 +20,7 @@
             <TextBlock Text="Movies" FontWeight="Bold" Margin="10"/>
 
             <!-- Movies -->
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10" Height="1000">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10" Height="900">
                 <ItemsControl ItemsSource="{Binding FilteredTitles}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -45,7 +45,7 @@
                                         <Image Source="{Binding IsFavorite, Converter={StaticResource FavoriteImageConverter}}" Width="20" Height="20" Margin="2" HorizontalAlignment="Right" Grid.Column="1" MouseLeftButtonUp="ToggleFavorite_MouseLeftButtonUp"/>
                                     </Grid>
                                     <StackPanel>
-                                        <TextBlock Text="Release Year: {Binding StartYear}" Margin="2"/>
+                                        <TextBlock Text="{Binding StartYear}" Margin="2"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
