@@ -84,6 +84,8 @@ namespace IMDB_Browser.ViewModels
 
         private async Task FilterTitles()
         {
+            
+            
             if (_titles == null || !_titles.Any())
             {
                 Console.WriteLine("Titles collection is empty. No filtering will be performed.");

@@ -26,9 +26,7 @@ namespace IMDB_Browser
 
             ServiceProvider = services.BuildServiceProvider();
 
-            // Load data into view models
-            LoadData();
-
+        
             // Get the main view model and set it in the navigation service
             var mainViewModel = ServiceProvider.GetRequiredService<MainViewModel>();
             var NavService = ServiceProvider.GetRequiredService<INavigationService>() as NavigationService;
@@ -37,6 +35,10 @@ namespace IMDB_Browser
             // Show the main window
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
+
+            // Load data into view models
+            LoadData();
+
         }
 
         private void ConfigureServices(ServiceCollection services)
@@ -52,23 +54,30 @@ namespace IMDB_Browser
             services.AddSingleton<MediaDetailViewModel>();
             services.AddSingleton<WatchListViewModel>();
             services.AddSingleton<HomeViewModel>();
+            services.AddSingleton<LoadingViewModel>();
+
         }
 
 
         private async void LoadData()
         {
+            //get current view to loading from nav
+            var navService = ServiceProvider.GetRequiredService<INavigationService>() as NavigationService;
+            navService.NavigateTo<LoadingViewModel>();
+
+           
             using (var scope = ServiceProvider.CreateScope())
             {
                 // Get the database context and view models
                 var dbcontext = scope.ServiceProvider.GetRequiredService<ImdbContext>();
 
                 // LINQ QUERIES GO HERE:
-                var titles = await dbcontext.Titles
+                var titles  = await dbcontext.Titles
                     .Include(t => t.Rating)
                     .ToListAsync();
 
                 // Filter favorite titles
-                var favoriteTitles = titles.Where(t => t.IsFavorite).ToList();
+                //var favoriteTitles = titles.Where(t => t.IsFavorite).ToList();
 
                 // Get the view models from the service provider
                 var homeViewModel = scope.ServiceProvider.GetRequiredService<HomeViewModel>();
@@ -78,9 +87,10 @@ namespace IMDB_Browser
 
                 // Load data from the database and set it in the view models
                 homeViewModel.Titles = new ObservableCollection<Title>(titles);
-                favouritesViewModel.FavMovies = new ObservableCollection<Title>(favoriteTitles);
-
-            }
+                //favouritesViewModel.FavMovies = new ObservableCollection<Title>(favoriteTitles);
+               
+                navService.NavigateTo<HomeViewModel>();
+            }            
         }
     }
 
