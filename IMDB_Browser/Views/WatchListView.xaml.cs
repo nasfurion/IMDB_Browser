@@ -45,8 +45,8 @@ namespace IMDB_Browser.Views
         {
             if (sender is Image image && image.DataContext is Title title)
             {
-                // Handle toggle watchlist click
-                title.IsInWatchlist = !title.IsInWatchlist;
+                var homeViewModel = ((App)Application.Current).ServiceProvider.GetService<HomeViewModel>();
+                homeViewModel.ToggleWatchlistCommand.Execute(title);
             }
         }
 
@@ -54,8 +54,8 @@ namespace IMDB_Browser.Views
         {
             if (sender is Image image && image.DataContext is Title title)
             {
-                // Handle toggle favorite click
-                title.IsFavorite = !title.IsFavorite;
+                var homeViewModel = ((App)Application.Current).ServiceProvider.GetService<HomeViewModel>();
+                homeViewModel.ToggleFavoriteCommand.Execute(title);
             }
         }
     }
