@@ -7,17 +7,36 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MediaDetailView">
 
+    <Page.Resources>
+        <ResourceDictionary>
+            <Style TargetType="StackPanel" x:Key="MainContentPanel">
+                <Setter Property="Margin" Value="10"></Setter>
+                <Setter Property="Background" Value="#F6F7F8"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
     
-    <StackPanel Style="{StaticResource DetailStackPanelStyle}" HorizontalAlignment="Center">
-        <Image Source="{Binding SelectedTitle.PosterPath}" Style="{StaticResource PosterImageStyle}"/>
-        <ScrollViewer Height="400">
-            <StackPanel Style="{StaticResource DetailContainerStyle}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <!-- Image -->
+            <ColumnDefinition Width="1*"/>
+            <!-- Main content -->
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Image -->
+        <Image Grid.Column="0" Source="{Binding SelectedTitle.PosterPath}"/>
+
+        <!-- Main content -->
+        <StackPanel Grid.Column="1" Style="{StaticResource MainContentPanel}">
+            <!-- HERE FOR "PADDING" -->
+            <StackPanel Style="{StaticResource MainContentPanel}">
                 <TextBlock Text="{Binding SelectedTitle.PrimaryTitle}" Style="{StaticResource TitleTextBlockStyle}"/>
                 <TextBlock Text="{Binding SelectedTitle.OriginalTitle}" Style="{StaticResource SubtitleTextBlockStyle}"/>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Genres: " Style="{StaticResource TextBlockStyle}"></TextBlock>
-                    <TextBlock Text="{Binding SelectedTitle.Genres}" Style="{StaticResource YearTextBlockStyle}"/>
+                    <TextBlock Text="{Binding GenresString}" Style="{StaticResource YearTextBlockStyle}"></TextBlock>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
@@ -32,10 +51,9 @@
 
                 <TextBlock Text="Description:" Style="{StaticResource SubtitleTextBlockStyle}"/>
                 <TextBlock Text="{Binding SelectedTitle.Description}" Style="{StaticResource DescriptionTextBlockStyle}"/>
-
-                <ListBox ItemsSource="{Binding Genres}" DisplayMemberPath="Name" Margin="10"/>
             </StackPanel>
-        </ScrollViewer>
-    </StackPanel>
+        </StackPanel>
+
+    </Grid>
     
 </Page>

@@ -71,6 +71,11 @@ namespace IMDB_Browser.Models
             }
         }
 
+
+        [NotMapped]
+        public string? GenresString => string.Join(", ", Genres.Select(g => g.Name));
+
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {

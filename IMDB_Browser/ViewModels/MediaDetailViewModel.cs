@@ -33,8 +33,11 @@ namespace IMDB_Browser.ViewModels
             {
                 _genres = value;
                 OnPropertyChanged(nameof(Genres));
+                OnPropertyChanged(nameof(GenresString));
             }
         }
+
+        public string GenresString => string.Join(", ", Genres.Select(g => g.Name));
 
         public MediaDetailViewModel(ImdbContext dbContext)
         {
