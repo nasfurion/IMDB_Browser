@@ -43,7 +43,7 @@
                                         <Image Source="{Binding IsFavorite, Converter={StaticResource FavoriteImageConverter}}" Width="20" Height="20" Margin="2" HorizontalAlignment="Right" Grid.Column="1" MouseLeftButtonUp="ToggleFavorite_MouseLeftButtonUp"/>
                                     </Grid>
                                     <StackPanel>
-                                        <TextBlock Text="Release Year: {Binding StartYear}" Margin="2"/>
+                                        <TextBlock Text="{Binding StartYear, StringFormat='Release Year: {0}'}" Margin="2"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>

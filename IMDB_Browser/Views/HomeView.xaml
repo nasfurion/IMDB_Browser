@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:IMDB_Browser.Views"
       xmlns:converters="clr-namespace:IMDB_Browser.Converters"
       mc:Ignorable="d" 
-      d:DesignHeight="800" d:DesignWidth="1000"
+      d:DesignHeight="900" d:DesignWidth="1000"
       Title="HomeView">
 
     <Page.Resources>
@@ -20,7 +20,7 @@
             <TextBlock Text="Movies" FontWeight="Bold" Margin="10"/>
 
             <!-- Movies -->
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10" Height="900">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10" Height="600">
                 <ItemsControl ItemsSource="{Binding FilteredTitles}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -45,7 +45,7 @@
                                         <Image Source="{Binding IsFavorite, Converter={StaticResource FavoriteImageConverter}}" Width="20" Height="20" Margin="2" HorizontalAlignment="Right" Grid.Column="1" MouseLeftButtonUp="ToggleFavorite_MouseLeftButtonUp"/>
                                     </Grid>
                                     <StackPanel>
-                                        <TextBlock Text="{Binding StartYear}" Margin="2"/>
+                                        <TextBlock Text="{Binding StartYear, StringFormat='Release Year: {0}'}" Margin="2"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -53,6 +53,13 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
+
+            <!-- Pagination Controls -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,25">
+                <Button Content="Previous" Command="{Binding PreviousPageCommand}" Width="75"  IsEnabled="{Binding PreviousPageCommand.CanExecute, Mode=OneWay}"/>
+                <TextBlock Text="{Binding PageInfo}" VerticalAlignment="Center" Margin="10"/>
+                <Button Content="Next" Command="{Binding NextPageCommand}" Width="75" IsEnabled="{Binding NextPageCommand.CanExecute, Mode=OneWay}"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

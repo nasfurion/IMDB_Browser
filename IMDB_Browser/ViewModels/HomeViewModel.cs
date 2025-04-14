@@ -15,6 +15,7 @@ namespace IMDB_Browser.ViewModels
 {
     public class HomeViewModel : INotifyPropertyChanged, ISearchable
     {
+        private const int PageSize = 100; // Number of items per page
         private readonly INavigationService _navigationService;
         private readonly FavouritesViewModel _favouritesViewModel;
         private readonly WatchListViewModel _watchListViewModel;
@@ -22,6 +23,8 @@ namespace IMDB_Browser.ViewModels
         private ObservableCollection<Title> _titles;
         private ObservableCollection<Title> _filteredTitles;
         private string _searchQuery;
+        private int _currentPage;
+        private int _totalPages;
 
         public ObservableCollection<Title> Titles
         {
@@ -54,23 +57,55 @@ namespace IMDB_Browser.ViewModels
                     _searchQuery = value;
                     OnPropertyChanged(nameof(SearchQuery));
 
+                    CurrentPage = 1;
+                    OnPropertyChanged(nameof(CurrentPage));
+
                     // Filter titles whenever the search query changes
                     _ = FilterTitles();  // Trigger filtering async
                 }
             }
         }
 
+        public int CurrentPage
+        {
+            get => _currentPage;
+            set
+            {
+                _currentPage = value;
+                OnPropertyChanged(nameof(CurrentPage));
+                OnPropertyChanged(nameof(PageInfo));
+            }
+        }
+
+        public int TotalPages
+        {
+            get => _totalPages;
+            set
+            {
+                _totalPages = value;
+                OnPropertyChanged(nameof(TotalPages));
+                OnPropertyChanged(nameof(PageInfo));
+            }
+        }
+
+        public string PageInfo => $"Page {CurrentPage} of {TotalPages}";
+
         public ICommand ToggleFavoriteCommand { get; }
         public ICommand ToggleWatchlistCommand { get; }
+        public ICommand NextPageCommand { get; }
+        public ICommand PreviousPageCommand { get; }
 
         // Default constructor
         public HomeViewModel()
         {
             _filteredTitles = new ObservableCollection<Title>();
             _titles = new ObservableCollection<Title>();
+            _currentPage = 1;
 
             ToggleFavoriteCommand = new RelayCommand(param => ToggleFavorite((Title)param));
             ToggleWatchlistCommand = new RelayCommand(param => ToggleWatchlist((Title)param));
+            NextPageCommand = new RelayCommand(_ => NextPage(), _ => CanGoToNextPage());
+            PreviousPageCommand = new RelayCommand(_ => PreviousPage(), _ => CanGoToPreviousPage());
         }
 
         // Constructor with INavigationService, FavouritesViewModel, and WatchListViewModel
@@ -84,8 +119,6 @@ namespace IMDB_Browser.ViewModels
 
         public async Task FilterTitles()
         {
-            
-            
             if (_titles == null || !_titles.Any())
             {
                 Console.WriteLine("Titles collection is empty. No filtering will be performed.");
@@ -98,8 +131,7 @@ namespace IMDB_Browser.ViewModels
             {
                 filtered = _titles
                     .Where(title => title.TitleType == "movie")
-                    .OrderByDescending(title => title.StartYear)
-                    .Take(100);
+                    .OrderByDescending(title => title.StartYear);
             }
             else
             {
@@ -107,13 +139,20 @@ namespace IMDB_Browser.ViewModels
                     .Where(title => title.PrimaryTitle != null &&
                                     title.PrimaryTitle.StartsWith(SearchQuery, StringComparison.OrdinalIgnoreCase) &&
                                     title.TitleType == "movie")
-                    .OrderByDescending(title => title.StartYear)
-                    .Take(100);
+                    .OrderByDescending(title => title.StartYear);
             }
+
+            // Calculate total pages
+            TotalPages = (int)Math.Ceiling((double)filtered.Count() / PageSize);
+
+            // Get the titles for the current page
+            var pagedTitles = filtered
+                .Skip((CurrentPage - 1) * PageSize)
+                .Take(PageSize);
 
             // Update FilteredTitles in-place for better UI performance
             _filteredTitles.Clear();
-            foreach (var item in filtered)
+            foreach (var item in pagedTitles)
                 _filteredTitles.Add(item);
 
             Console.WriteLine($"FilteredTitles updated with {FilteredTitles.Count} items.");
@@ -216,6 +255,29 @@ namespace IMDB_Browser.ViewModels
                 _watchListViewModel.UpdateWatchList(title);
             }
         }
+
+        private void NextPage()
+        {
+            if (CanGoToNextPage())
+            {
+                CurrentPage++;
+                _ = FilterTitles();
+            }
+        }
+
+        private void PreviousPage()
+        {
+            if (CanGoToPreviousPage())
+            {
+                CurrentPage--;
+                _ = FilterTitles();
+            }
+        }
+
+        private bool CanGoToNextPage() => CurrentPage < TotalPages;
+
+        private bool CanGoToPreviousPage() => CurrentPage > 1;
+
         public ICommand NavigateToMediaDetailsCommand => _mainViewModel.NavigateToMediaDetailsCommand;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -226,3 +288,4 @@ namespace IMDB_Browser.ViewModels
         }
     }
 }
+
