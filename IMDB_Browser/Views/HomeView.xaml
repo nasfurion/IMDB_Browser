@@ -17,10 +17,10 @@
 
     <Grid>
         <StackPanel>
-            <TextBlock Text="Movies" FontWeight="Bold" Margin="10"/>
+            <TextBlock Text="Movies" Style="{StaticResource MoviesTitleTextStyle}"/>
 
             <!-- Movies -->
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10" Height="600">
+            <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
                 <ItemsControl ItemsSource="{Binding FilteredTitles}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -30,10 +30,10 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel HorizontalAlignment="Center" Margin="10" Width="200" VerticalAlignment="Top">
+                            <StackPanel Style="{StaticResource MovieItemStackPanelStyle}">
                                 <Grid>
-                                    <Image Source="{Binding PosterPath, Converter={StaticResource StringToImageSourceConverter}}" Width="200" Height="300" Stretch="UniformToFill" Margin="0,0,0,5" MouseLeftButtonUp="PosterImage_MouseLeftButtonUp"/>
-                                    <Image Source="{Binding IsInWatchlist, Converter={StaticResource WatchlistImageConverter}}" Width="40" Height="40" VerticalAlignment="Top" HorizontalAlignment="Left" MouseLeftButtonUp="ToggleWatchlist_MouseLeftButtonUp"/>
+                                    <Image Source="{Binding PosterPath, Converter={StaticResource StringToImageSourceConverter}}" Style="{StaticResource MoviePosterImageStyle}" MouseLeftButtonUp="PosterImage_MouseLeftButtonUp"/>
+                                    <Image Source="{Binding IsInWatchlist, Converter={StaticResource WatchlistImageConverter}}" Style="{StaticResource WatchlistImageStyle}" MouseLeftButtonUp="ToggleWatchlist_MouseLeftButtonUp"/>
                                 </Grid>
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
                                     <Grid>
@@ -42,10 +42,10 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{Binding PrimaryTitle}" FontWeight="Bold" Margin="2" HorizontalAlignment="Left" Grid.Column="0"/>
-                                        <Image Source="{Binding IsFavorite, Converter={StaticResource FavoriteImageConverter}}" Width="20" Height="20" Margin="2" HorizontalAlignment="Right" Grid.Column="1" MouseLeftButtonUp="ToggleFavorite_MouseLeftButtonUp"/>
+                                        <Image Source="{Binding IsFavorite, Converter={StaticResource FavoriteImageConverter}}" Style="{StaticResource FavoriteImageStyle}" Grid.Column="1" MouseLeftButtonUp="ToggleFavorite_MouseLeftButtonUp"/>
                                     </Grid>
                                     <StackPanel>
-                                        <TextBlock Text="{Binding StartYear, StringFormat='Release Year: {0}'}" Margin="2"/>
+                                        <TextBlock Text="{Binding StartYear, StringFormat='Release Year: {0}'}" Style="{StaticResource ReleaseYearTextStyle}"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
